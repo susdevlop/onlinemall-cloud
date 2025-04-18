@@ -1,0 +1,13 @@
+package us.sushome.onlinemallcloud.omcgateway810x;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class OmcGateway810xApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(OmcGateway810xApplication.class, args);
+	}
+
+}
