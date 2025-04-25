@@ -6,6 +6,7 @@
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/omc-gateway-810x/pom.xml" />
+        <option value="$PROJECT_DIR$/omc-user-820x/pom.xml" />
       </list>
     </option>
   </component>

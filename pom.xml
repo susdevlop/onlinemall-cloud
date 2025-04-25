@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.3.3</version>
+    <version>3.4.4</version>
   </parent>
 
   <groupId>us.sushome.onlinemall-cloud</groupId>
@@ -17,15 +17,18 @@
 
   <modules>
     <module>omc-gateway-810x</module>
+    <module>omc-common</module>
+    <module>omc-user-820x</module>
   </modules>
 
   <properties>
     <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <springboot.version>3.3.3</springboot.version>
+    <springboot.version>3.4.4</springboot.version>
     <spring-cloud.version>2024.0.1</spring-cloud.version>
-    <springcloud.nacos-cloud-config.version>2023.0.3.2</springcloud.nacos-cloud-config.version>
+    <springcloud.nacos.version>2023.0.3.2</springcloud.nacos.version>
+    <mysql.version>8.3.0</mysql.version>
   </properties>
 
   <dependencyManagement>
@@ -33,7 +36,12 @@
       <dependency>
         <groupId>com.alibaba.cloud</groupId>
         <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
-        <version>${springcloud.nacos-cloud-config.version}</version>
+        <version>${springcloud.nacos.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.alibaba.cloud</groupId>
+        <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+        <version>${springcloud.nacos.version}</version>
       </dependency>
       <dependency>
         <groupId>org.springframework.cloud</groupId>
@@ -41,6 +49,12 @@
         <version>${spring-cloud.version}</version>
         <type>pom</type>
         <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>com.mysql</groupId>
+        <artifactId>mysql-connector-j</artifactId>
+        <version>8.3.0</version>
+        <scope>runtime</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>

@@ -2,7 +2,10 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-
+#忽略上传当前系统架构的 tomcat-native 文件
+/bin/libtcnative-2.0.dylib
+/bin/libtcnative-2.a
+/bin/libtcnative-2.dylib
 ### IntelliJ IDEA ###
 .idea/modules.xml
 .idea/jarRepositories.xml
