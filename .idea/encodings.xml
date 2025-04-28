@@ -3,6 +3,10 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/omc-common/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/omc-gateway-810x/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/omc-goods-830x/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/omc-mq-850x/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/omc-mq/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/omc-order-840x/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/omc-user-820x/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />

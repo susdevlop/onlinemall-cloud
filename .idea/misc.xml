@@ -7,7 +7,16 @@
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/omc-gateway-810x/pom.xml" />
         <option value="$PROJECT_DIR$/omc-user-820x/pom.xml" />
+        <option value="$PROJECT_DIR$/omc-goods-830x/pom.xml" />
+        <option value="$PROJECT_DIR$/omc-order-840x/pom.xml" />
+        <option value="$PROJECT_DIR$/omc-mq/pom.xml" />
+        <option value="$PROJECT_DIR$/omc-mq-850x/pom.xml" />
       </list>
+    </option>
+    <option name="ignoredFiles">
+      <set>
+        <option value="$PROJECT_DIR$/omc-mq/pom.xml" />
+      </set>
     </option>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_17" default="true" project-jdk-name="corretto-17" project-jdk-type="JavaSDK">

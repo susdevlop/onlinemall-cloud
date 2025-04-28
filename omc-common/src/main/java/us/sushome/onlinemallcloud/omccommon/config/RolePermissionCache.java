@@ -7,6 +7,7 @@ import us.sushome.onlinemallcloud.omccommon.api.user.UserServiceApi;
 import us.sushome.onlinemallcloud.omccommon.api.user.vo.PermissionVo;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 public class RolePermissionCache {
@@ -40,32 +41,31 @@ public class RolePermissionCache {
     private final Map<Integer, List<String>> rolePermissionsMap = new HashMap<>();
 
     public List<String> getPermissionsByRoleId(Integer roleId) {
+        if (roleId == 0) {//超级管理员
+            // 返回所有权限的集合（去重）
+            return rolePermissionsMap.values().stream()
+                    .flatMap(List::stream)
+                    .distinct()
+                    .collect(Collectors.toList());
+        }
         return rolePermissionsMap.computeIfAbsent(roleId, k -> new ArrayList<>());
     }
 
-    public void loadPermissions(Map<Integer, List<String>> initialData){
-        //needReLoginUserIdList.clear();
-        rolePermissionsMap.clear();
-        rolePermissionsMap.putAll(initialData);
-    }
-
-    public void clearCache(){
-        rolePermissionsMap.clear();
-    }
 
     @PostConstruct
     public void loadPermissionsIntoMemory(){
         System.out.println("-------开始初始化权限表--------");
         List<PermissionVo> rolePermissions = userServiceApi.getPermissionsList();
-        Map<Integer, List<String>> rolePermissionsMap = new HashMap<>();
+        Map<Integer, List<String>> initialData = new HashMap<>();
         for (PermissionVo permissionVo : rolePermissions) {
             Integer roleId = permissionVo.getOmPermissionRoleid();
-            Set<String> pathSet = new HashSet<>(rolePermissionsMap.computeIfAbsent(roleId, k -> new ArrayList<>()));
+            Set<String> pathSet = new HashSet<>(initialData.computeIfAbsent(roleId, k -> new ArrayList<>()));
             pathSet.add(permissionVo.getOmPermissionPath());
-            rolePermissionsMap.put(roleId,new ArrayList<>(pathSet));
+            initialData.put(roleId,new ArrayList<>(pathSet));
         }
         System.out.println("当前权限表："+rolePermissions.toString());
         System.out.println("------------------------------");
-        loadPermissions(rolePermissionsMap);
+        rolePermissionsMap.clear();
+        rolePermissionsMap.putAll(initialData);
     }
 }

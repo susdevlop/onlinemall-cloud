@@ -12,11 +12,11 @@ import java.util.List;
 @FeignClient(value = "omc-user-820x",path = "/openApi/user")
 public interface UserServiceApi {
     @PostMapping("/getPermissionsList")
-    public List<PermissionVo> getPermissionsList();
-
-    @PostMapping("/getCurrentPermission")
-    public Result<List<Integer>> getCurrentPermission(String userId);
+    List<PermissionVo> getPermissionsList();
 
     @PostMapping("/getUserInfo")
-    public Result<UserVo> getUserInfo(String id,String name,String phone,String email);
+    UserVo getUserInfo(String id);
+
+    @PostMapping("/updateUserInfo")
+    UserVo updateUserInfo(UserVo userVo);
 }

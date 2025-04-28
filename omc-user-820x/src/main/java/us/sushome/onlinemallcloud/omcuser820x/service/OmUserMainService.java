@@ -150,9 +150,6 @@ public class OmUserMainService{
 
     public Boolean setUserPermissionByUserId(String userId, List<Integer> roleIds) {
         List<OmUserPermission> newUserRoleList = new ArrayList<>();
-        if(roleIds.isEmpty()){
-            roleIds.add(1);
-        }
         for (Integer i : roleIds) {
             OmUserPermission omUserPermission = new OmUserPermission();
             omUserPermission.setOmUpId(UUID.randomUUID().toString().replace("-",""));

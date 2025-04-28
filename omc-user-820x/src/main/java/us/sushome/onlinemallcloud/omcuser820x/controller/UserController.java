@@ -1,19 +1,20 @@
 package us.sushome.onlinemallcloud.omcuser820x.controller;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
+import cn.dev33.satoken.annotation.SaCheckRole;
+import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.stp.StpUtil;
 import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import us.sushome.onlinemallcloud.omccommon.api.user.UserServiceApi;
 import us.sushome.onlinemallcloud.omccommon.api.user.vo.PermissionVo;
 import us.sushome.onlinemallcloud.omccommon.api.user.vo.UserVo;
-import us.sushome.onlinemallcloud.omccommon.config.RolePermissionCache;
 import us.sushome.onlinemallcloud.omccommon.result.CodeMsg;
 import us.sushome.onlinemallcloud.omccommon.result.Result;
+import us.sushome.onlinemallcloud.omccommon.utils.StringUtils;
 import us.sushome.onlinemallcloud.omcuser820x.service.OmUserMainService;
 //import us.sushome.onlinemallcloud.omccommon.utils.file.QiniuUploadUtils;
 
@@ -23,6 +24,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import static us.sushome.onlinemallcloud.omccommon.constants.UserRoleConstants.USER_MANAGER_ROLE_NAME;
+
 @RestController
 @RequestMapping("/openApi/user")
 public class UserController implements UserServiceApi {
@@ -31,7 +34,6 @@ public class UserController implements UserServiceApi {
     @Autowired
     OmUserMainService omUserMainService;
 
-    @SaCheckPermission("/openApi/user")
     @GetMapping("/adminTest")
     public String adminTest() {
         return "adminTest";
@@ -40,6 +42,18 @@ public class UserController implements UserServiceApi {
     @GetMapping("/userTest")
     public String userTest() {
         return "userTest";
+    }
+
+    public Result returnLoginResult(Result<Map<String,Object>> result){
+        if(result.getCode() == CodeMsg.SUCCESS.getCode()){
+            Map<String,Object> map = result.getData();
+            UserVo userVo = (UserVo) map.get("userInfo");
+            String roleList = map.get("roleList").toString();
+            StpUtil.login(userVo.getUserId());
+            StpUtil.getSession().set("userInfo", userVo);
+            StpUtil.getSession().set("roleList", roleList);
+        }
+        return result;
     }
 
     @PostMapping("/login")
@@ -52,28 +66,14 @@ public class UserController implements UserServiceApi {
             isRememberMe = false;
         }
         Result<Map<String,Object>> result = omUserMainService.login(userName, userPasswd, isRememberMe);
-        if(result.getCode() == CodeMsg.SUCCESS.getCode()){
-            Map<String,Object> map = result.getData();
-            UserVo userVo = (UserVo) map.get("userInfo");
-            String roleList = map.get("roleList").toString();
-            StpUtil.login(userVo.getUserId());
-            StpUtil.getSession().set("roleList", roleList);
-        }
-        return result;
+        return returnLoginResult(result);
     }
 
     @PostMapping("/register")
     public Result register(@RequestBody UserVo userVo) {
         logger.info("register user: {}", userVo);
         Result<Map<String,Object>> result = omUserMainService.register(userVo);
-        if(result.getCode() == CodeMsg.SUCCESS.getCode()){
-            Map<String,Object> map = result.getData();
-            UserVo _userVo = (UserVo) map.get("userInfo");
-            String roleList = map.get("roleList").toString();
-            StpUtil.login(_userVo.getUserId());
-            StpUtil.getSession().set("roleList", roleList);
-        }
-        return result;
+        return returnLoginResult(result);
     }
 
     @PostMapping("/logout")
@@ -82,32 +82,37 @@ public class UserController implements UserServiceApi {
         return Result.success("登出成功");
     }
 
-    //@PreAuthorize("@Pm.check('/openApi/user/getUserInfo')")
+    @SaCheckPermission("/openApi/user/getUserInfo")
     @PostMapping("/getUserInfo")
     public Result<UserVo> getUserInfo(String id,String name,String phone,String email){
         return Result.success(omUserMainService.getUserInfo(id,name,phone,email));
     }
 
-    @PostMapping("/getMyUserInfo")
-    public Result<UserVo> getMyUserInfo(){
-        //Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        //UserVo userVo = (UserVo) authentication.getPrincipal();
-        return Result.success(omUserMainService.getUserInfo(null,null,null,null));
+    @SaCheckPermission("/openApi/user/getUserInfo")
+    @PostMapping("/getUserInfo")
+    public UserVo getUserInfo(String id){
+        return omUserMainService.getUserInfo(id,null,null,null);
     }
 
-    //@PreAuthorize("@Pm.check('/openApi/user/getUserInfoList')")
+    @PostMapping("/getMyUserInfo")
+    public Result<UserVo> getMyUserInfo(){
+        UserVo userVo = (UserVo) StpUtil.getSession().get("userInfo");
+        return Result.success(omUserMainService.getUserInfo(userVo.getUserId(),null,null,null));
+    }
+
+    @SaCheckPermission("/openApi/user/getUserInfoList")
     @PostMapping("/getUserInfoList")
     public Result<List<UserVo>> getUserInfoList(){
         return Result.success(omUserMainService.getUserInfoList());
     }
 
-    //@PreAuthorize("@Pm.check('/openApi/user/getUserBySelect')")
+    @SaCheckPermission("/openApi/user/getUserBySelect")
     @PostMapping("/getUserBySelect")
     public Result<List<UserVo>> getUserBySelect(@RequestBody UserVo userVo){
         return Result.success(omUserMainService.getUserBySelect(userVo));
     }
 
-    //@PreAuthorize("@Pm.check('/openApi/user/getUserPermissionByUserId')")
+    @SaCheckPermission("/openApi/user/getUserPermissionByUserId")
     @PostMapping("/getUserPermissionByUserId")
     public Result<List<Integer>> getUserPermissionByUserId(@RequestBody Map<String, String> requestBody){
         String userId = requestBody.get("userId");
@@ -117,13 +122,13 @@ public class UserController implements UserServiceApi {
         return Result.success(omUserMainService.getUserPermissionByUserId(userId));
     }
 
-    @Override
     @PostMapping("/getCurrentPermission")
-    public Result<List<Integer>> getCurrentPermission(String userId){
-        return Result.success(omUserMainService.getUserPermissionByUserId(userId));
+    public Result<List<Integer>> getCurrentPermission(){
+        UserVo userVo = (UserVo) StpUtil.getSession().get("userInfo");
+        return Result.success(omUserMainService.getUserPermissionByUserId(userVo.getUserId()));
     }
 
-    //@PreAuthorize("@Pm.check('/openApi/user/getPermissionsList')")
+    @SaCheckPermission("/openApi/user/getPermissionsList")
     @PostMapping("/getPermissionsList")
     public Result<List<PermissionVo>> getPermissionsList(String roleId){
         return Result.success(omUserMainService.getPermissionsList());
@@ -135,7 +140,7 @@ public class UserController implements UserServiceApi {
         return omUserMainService.getPermissionsList();
     }
 
-    //@PreAuthorize("@Pm.check('/openApi/user/setUserPermissionByUserId')")
+    @SaCheckRole(USER_MANAGER_ROLE_NAME)
     @PostMapping("/setUserPermissionByUserId")
     public Result<Boolean> setUserPermissionByUserId(@RequestBody Map<String, Object> requestBody){
 
@@ -152,16 +157,23 @@ public class UserController implements UserServiceApi {
         for (String roleId : roleIds) {
             roleIdsInt.add(Integer.parseInt(roleId));
         }
+        if(roleIdsInt.isEmpty()){
+            roleIdsInt.add(1);
+        }
         logger.info("roleIds"+ roleIds);
         Boolean isSuccess = omUserMainService.setUserPermissionByUserId(userId,roleIdsInt);
         if(isSuccess){
-            //rolePermissionCache.addNeedReLogin(userId);
+            SaSession session = StpUtil.getSessionByLoginId(userId);
+            session.set("roleList", StringUtils.join(roleIdsInt, ","));
         }
         return Result.success(isSuccess);
     }
 
-
-
+    @SaCheckPermission("/openApi/user")
+    @PostMapping("/updateUserInfo")
+    public UserVo updateUserInfo(UserVo userVo){
+        return omUserMainService.updateUserInfo(userVo);
+    }
     //@PreAuthorize("@Pm.check('/openApi/user/getUploadToken')")
     //@PostMapping("/getUploadToken")
     //public Result<String> getUploadToken(){

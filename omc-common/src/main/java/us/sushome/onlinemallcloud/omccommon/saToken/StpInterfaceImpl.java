@@ -14,6 +14,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static us.sushome.onlinemallcloud.omccommon.constants.UserRoleConstants.*;
+
 @Component
 public class StpInterfaceImpl implements StpInterface {
 
@@ -39,18 +41,24 @@ public class StpInterfaceImpl implements StpInterface {
 
     @Override
     public List<String> getRoleList(Object loginId, String loginType) {
-        String roleList = (String) StpUtil.getTokenSession().get("roleList");
+        String roleList = (String) StpUtil.getSession().get("roleList");
         List<Integer> roleIdList = new ArrayList<>();
         for (String s : roleList.split(",")) {
             roleIdList.add(Integer.parseInt(s));
         }
         // 示例角色，根据实际业务逻辑返回
-        if(roleIdList.contains(0)){
-            return List.of("admin");
-        }else if(roleIdList.contains(1)){
-            return List.of("user");
-        }else{
-            return List.of("systemUser");
+        if(roleIdList.contains(ADMIN_ROLE_ID)){
+            return List.of(ADMIN_ROLE_NAME,USER_MANAGER_ROLE_NAME,GOODS_MANAGER_ROLE_NAME,ORDER_MANAGER_ROLE_NAME);
+        }else if(roleIdList.contains(USER_ROLE_ID)){
+            return List.of(USER_ROLE_NAME);
+        }else if(roleIdList.contains(USER_MANAGER_ROLE_ID)){
+            return List.of(USER_MANAGER_ROLE_NAME);
+        }else if(roleIdList.contains(GOODS_MANAGER_ROLE_ID)){
+            return List.of(GOODS_MANAGER_ROLE_NAME);
+        }else if(roleIdList.contains(ORDER_MANAGER_ROLE_ID)){
+            return List.of(ORDER_MANAGER_ROLE_NAME);
+        }else {
+            return List.of(USER_ROLE_NAME);
         }
     }
 }

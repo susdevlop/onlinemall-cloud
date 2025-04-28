@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: omc-mq-850x
+
+  cloud:
+    nacos:
+      config:
+        server-addr: 127.0.0.1:8848
+        file-extension: yml
+        refresh-enabled: true
+        namespace: 4f4bab40-8cb4-44b4-bbc1-c759e35d3291
+        group: DEFAULT_GROUP
+        prefix: omc-mq-850x
+
+
+  config:
+    import:
+      - nacos:${spring.cloud.nacos.config.prefix}
+      - nacos:common-config

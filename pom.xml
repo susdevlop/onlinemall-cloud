@@ -16,9 +16,12 @@
   <name>onlinemall-cloud</name>
 
   <modules>
-    <module>omc-gateway-810x</module>
     <module>omc-common</module>
+    <module>omc-gateway-810x</module>
     <module>omc-user-820x</module>
+    <module>omc-goods-830x</module>
+    <module>omc-order-840x</module>
+    <module>omc-mq-850x</module>
   </modules>
 
   <properties>
