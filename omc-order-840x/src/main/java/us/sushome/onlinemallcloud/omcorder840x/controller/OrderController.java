@@ -47,7 +47,7 @@ public class OrderController implements OrderServiceApi {
     @Autowired
     RedisService redisService;
 
-    @DubboReference(interfaceClass = MqProviderServiceApi.class)
+    @Autowired
     MqProviderServiceApi mqProviderServiceApi;
 
     @Autowired
