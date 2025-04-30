@@ -1,5 +1,6 @@
 package us.sushome.onlinemallcloud.omcmq850x.service;
 
+import org.apache.dubbo.config.annotation.DubboService;
 import org.apache.rocketmq.client.producer.SendCallback;
 import org.apache.rocketmq.client.producer.SendResult;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
@@ -7,13 +8,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.support.MessageBuilder;
-import org.springframework.stereotype.Service;
 import us.sushome.onlinemallcloud.omccommon.api.mq.MqProviderServiceApi;
 import us.sushome.onlinemallcloud.omccommon.api.order.vo.OrderVo;
 import us.sushome.onlinemallcloud.omcmq850x.config.RocketMQConfig;
 
-@Service
-public class MqProviderService {
+@DubboService(interfaceClass = MqProviderServiceApi.class)
+public class MqProviderService implements MqProviderServiceApi {
     private static Logger logger = LoggerFactory.getLogger(MqProviderService.class);
 
     @Autowired
@@ -56,7 +56,7 @@ public class MqProviderService {
             if(type == 0){
                 sendSkMessageAsync(orderVo,RocketMQConfig.ORDER_TOPIC,RocketMQConfig.GENERAL_ORDER_TAG);
             }else if(type == 1){
-               //RocketMQConfig.SECKILL_ORDER_TAG;
+                //RocketMQConfig.SECKILL_ORDER_TAG;
                 sendSkMessageAsync(orderVo,RocketMQConfig.SECKILL_TOPIC,RocketMQConfig.SECKILL_ORDER_TAG);
             }else{
                 logger.error("未知订单类型");
@@ -98,20 +98,20 @@ public class MqProviderService {
     public static void sendDelayCloseOrderMessage(RocketMQTemplate rocketMQTemplate,OrderVo orderVo,String tag,int delaySeconds,int tryCount) {
         logger.info("发送延时订单消息: {}{} {}秒后将消费", orderVo, tag,delaySeconds);
         rocketMQTemplate.asyncSend(RocketMQConfig.ORDER_TOPIC+":"+tag,
-            MessageBuilder
-                    .withPayload(orderVo)
-                    .setHeader("tryCount",tryCount)
-                    .build(),
-            new SendCallback() {
-                @Override
-                public void onSuccess(SendResult sendResult) {
-                    logger.info("延迟关单消息发送成功，订单ID: {} {}", sendResult,tag);
-                }
-                @Override
-                public void onException(Throwable e) {
-                    logger.error("延迟关单消息发送失败: {} {}", orderVo, tag,e);
-            }
-        },3000,calculateDelayLevel(delaySeconds));
+                MessageBuilder
+                        .withPayload(orderVo)
+                        .setHeader("tryCount",tryCount)
+                        .build(),
+                new SendCallback() {
+                    @Override
+                    public void onSuccess(SendResult sendResult) {
+                        logger.info("延迟关单消息发送成功，订单ID: {} {}", sendResult,tag);
+                    }
+                    @Override
+                    public void onException(Throwable e) {
+                        logger.error("延迟关单消息发送失败: {} {}", orderVo, tag,e);
+                    }
+                },3000,calculateDelayLevel(delaySeconds));
     }
 
 }

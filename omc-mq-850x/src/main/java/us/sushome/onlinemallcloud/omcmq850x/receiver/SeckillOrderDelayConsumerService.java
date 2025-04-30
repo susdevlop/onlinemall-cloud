@@ -41,7 +41,7 @@ public class SeckillOrderDelayConsumerService implements RocketMQListener<Messag
     @Autowired
     OrderServiceApi orderServiceApi;
 
-    @Resource
+    @Autowired
     GoodsServiceApi goodsServiceApi;
 
     @Autowired

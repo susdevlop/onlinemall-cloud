@@ -32,7 +32,7 @@ public class SeckillOrderConsumerService implements RocketMQListener<OrderVo> {
     @Autowired
     private RedisService redisService;
 
-    @Resource
+    @Autowired
     OrderServiceApi orderServiceApi;
 
     //@Autowired

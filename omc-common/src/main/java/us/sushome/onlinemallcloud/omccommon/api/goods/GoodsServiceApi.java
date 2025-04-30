@@ -4,42 +4,42 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import us.sushome.onlinemallcloud.omccommon.api.goods.vo.GoodInfoVo;
 import us.sushome.onlinemallcloud.omccommon.api.goods.vo.SeckillGoodVo;
+import us.sushome.onlinemallcloud.omccommon.saToken.FeignInterceptor;
 
 import java.util.List;
 import java.util.Map;
 
-@FeignClient(value = "omc-goods-830x",path = "/openApi/goods")
+@FeignClient(value = "omc-goods-830x",path = "/internal/goods",configuration = FeignInterceptor.class)
 public interface GoodsServiceApi{
 
     @GetMapping("/getGoodInfoBySkuIdFromFeign")
-    GoodInfoVo getGoodInfoBySkuId(String skuId);
+    GoodInfoVo getGoodInfoBySkuId(@RequestParam String skuId);
 
     @GetMapping("getOpeningSeckillGoodListFromFeign")
     List<SeckillGoodVo> getOpeningSeckillGoodList();
 
     @GetMapping("/getSeckillGoodInfoByIdFromFeign")
-    SeckillGoodVo getSeckillGoodInfoById(String id);
+    SeckillGoodVo getSeckillGoodInfoById(@RequestParam String id);
 
-    @Transactional
     @PostMapping("/decrementGoodSkuInventoryByDecrActionListFromFeign")
-    Boolean decrementGoodSkuInventoryByDecrActionList(List<Map<String,Object>> decrActionList);
+    Boolean decrementGoodSkuInventoryByDecrActionList(@RequestBody List<Map<String,Object>> decrActionList);
 
     @GetMapping("/getSkuInventoryByIdFromFeign")
-    Integer getSkuInventoryById(String id);
+    Integer getSkuInventoryById(@RequestParam String id);
 
     @GetMapping("/getSeckillGoodInventoryByIdFromFeign")
-    Integer getSeckillGoodInventoryById(String id);
+    Integer getSeckillGoodInventoryById(@RequestParam String id);
 
-    @Transactional
     @GetMapping("/decrementSeckillGoodInventoryFromFeign")
-    Boolean decrementSeckillGoodInventory(String id);
+    Boolean decrementSeckillGoodInventory(@RequestParam String id);
 
     @GetMapping("/incrementSeckillGoodInventoryFromFeign")
-    Boolean incrementSeckillGoodInventory(String id);
+    Boolean incrementSeckillGoodInventory(@RequestParam String id);
 
-    @Transactional
     @PostMapping("/restoreStockByDecrActionListFromFeign")
-    Boolean restoreStockByDecrActionList(List<Map<String,Object>> decrActionList);
+    Boolean restoreStockByDecrActionList(@RequestBody List<Map<String,Object>> decrActionList);
 }

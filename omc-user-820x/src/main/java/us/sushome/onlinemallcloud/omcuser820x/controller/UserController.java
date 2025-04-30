@@ -28,7 +28,7 @@ import static us.sushome.onlinemallcloud.omccommon.constants.UserRoleConstants.U
 
 @RestController
 @RequestMapping("/openApi/user")
-public class UserController implements UserServiceApi {
+public class UserController{
     private static Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
@@ -84,15 +84,10 @@ public class UserController implements UserServiceApi {
 
     @SaCheckPermission("/openApi/user/getUserInfo")
     @PostMapping("/getUserInfo")
-    public Result<UserVo> getUserInfo(String id,String name,String phone,String email){
+    public Result<UserVo> getUserInfoByHttp(String id,String name,String phone,String email){
         return Result.success(omUserMainService.getUserInfo(id,name,phone,email));
     }
 
-    @SaCheckPermission("/openApi/user/getUserInfo")
-    @PostMapping("/getUserInfo")
-    public UserVo getUserInfo(String id){
-        return omUserMainService.getUserInfo(id,null,null,null);
-    }
 
     @PostMapping("/getMyUserInfo")
     public Result<UserVo> getMyUserInfo(){
@@ -130,15 +125,10 @@ public class UserController implements UserServiceApi {
 
     @SaCheckPermission("/openApi/user/getPermissionsList")
     @PostMapping("/getPermissionsList")
-    public Result<List<PermissionVo>> getPermissionsList(String roleId){
+    public Result<List<PermissionVo>> getPermissionsListByHttp(String roleId){
         return Result.success(omUserMainService.getPermissionsList());
     }
 
-    @Override
-    @GetMapping("/getPermissionsList")
-    public List<PermissionVo> getPermissionsList() {
-        return omUserMainService.getPermissionsList();
-    }
 
     @SaCheckRole(USER_MANAGER_ROLE_NAME)
     @PostMapping("/setUserPermissionByUserId")
@@ -169,11 +159,6 @@ public class UserController implements UserServiceApi {
         return Result.success(isSuccess);
     }
 
-    @SaCheckPermission("/openApi/user")
-    @PostMapping("/updateUserInfo")
-    public UserVo updateUserInfo(UserVo userVo){
-        return omUserMainService.updateUserInfo(userVo);
-    }
     //@PreAuthorize("@Pm.check('/openApi/user/getUploadToken')")
     //@PostMapping("/getUploadToken")
     //public Result<String> getUploadToken(){

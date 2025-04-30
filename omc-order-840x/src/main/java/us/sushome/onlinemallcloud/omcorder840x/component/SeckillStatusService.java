@@ -21,8 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 public class SeckillStatusService {
     //自认为这个地方写的乱七八糟
-
-    @DubboReference(interfaceClass = GoodsServiceApi.class)
+    @Autowired
     private GoodsServiceApi goodsServiceApi;
 
     @Autowired

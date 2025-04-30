@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,8 +61,8 @@ public class OmOrderMainService{
     @Resource
     private UserServiceApi userServiceApi;
 
-    @Autowired
-    RedisLockService redisLockService;
+    //@Autowired
+    //RedisLockService redisLockService;
 
     @Autowired
     RedisService redisService;
@@ -316,11 +317,13 @@ public class OmOrderMainService{
                         boolean result = goodsServiceApi.decrementGoodSkuInventoryByDecrActionList(decrActionList);
                         if(!result){
                             stockIsEnough = false;
+                            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
                             resultVo.setMessage(CodeMsg.GOODS_STOCK_NOT_ENOUGH);
                         }
                     }
                 } catch (Exception e) {
                     stockIsEnough = false;
+                    TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
                     resultVo.setMessage(CodeMsg.SERVER_ERROR);
                 }
             }

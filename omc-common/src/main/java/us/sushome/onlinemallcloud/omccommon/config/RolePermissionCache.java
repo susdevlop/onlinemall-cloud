@@ -41,6 +41,10 @@ public class RolePermissionCache {
     private final Map<Integer, List<String>> rolePermissionsMap = new HashMap<>();
 
     public List<String> getPermissionsByRoleId(Integer roleId) {
+        if(rolePermissionsMap.isEmpty()){
+            loadPermissionsIntoMemory();
+        }
+
         if (roleId == 0) {//超级管理员
             // 返回所有权限的集合（去重）
             return rolePermissionsMap.values().stream()
@@ -52,7 +56,6 @@ public class RolePermissionCache {
     }
 
 
-    @PostConstruct
     public void loadPermissionsIntoMemory(){
         System.out.println("-------开始初始化权限表--------");
         List<PermissionVo> rolePermissions = userServiceApi.getPermissionsList();

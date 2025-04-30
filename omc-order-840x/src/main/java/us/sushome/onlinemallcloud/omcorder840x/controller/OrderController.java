@@ -14,7 +14,6 @@ import us.sushome.onlinemallcloud.omccommon.api.cache.vo.OrderKeyPrefix;
 import us.sushome.onlinemallcloud.omccommon.api.cache.vo.SeckillKeyPrefix;
 import us.sushome.onlinemallcloud.omccommon.api.goods.vo.SeckillGoodVo;
 import us.sushome.onlinemallcloud.omccommon.api.mq.MqProviderServiceApi;
-import us.sushome.onlinemallcloud.omccommon.api.order.OrderServiceApi;
 import us.sushome.onlinemallcloud.omccommon.api.order.vo.NewOrderVo;
 import us.sushome.onlinemallcloud.omccommon.api.order.vo.OrderVo;
 import us.sushome.onlinemallcloud.omccommon.api.user.vo.UserVo;
@@ -38,7 +37,7 @@ import static us.sushome.onlinemallcloud.omccommon.constants.OrderConstants.SECK
 
 @RestController
 @RequestMapping("/openApi/order")
-public class OrderController implements OrderServiceApi {
+public class OrderController{
     private static Logger logger = LoggerFactory.getLogger(OrderController.class);
 
     @Autowired
@@ -47,7 +46,7 @@ public class OrderController implements OrderServiceApi {
     @Autowired
     RedisService redisService;
 
-    @Autowired
+    @DubboReference(interfaceClass = MqProviderServiceApi.class)
     MqProviderServiceApi mqProviderServiceApi;
 
     @Autowired
@@ -262,30 +261,6 @@ public class OrderController implements OrderServiceApi {
     public Result<CodeMsg> updateOrderInfoByHttp(@RequestBody OrderVo orderVo){
         CodeMsg codeMsg = omOrderMainService.updateOrderInfo(orderVo);
         return Result.info(codeMsg);
-    }
-
-    @GetMapping("/getOrderByIdFromFeign")
-    @Override
-    public OrderVo getOrderById(String orderId, String userId) {
-        return omOrderMainService.getOrderById(orderId,userId);
-    }
-
-    @PostMapping("/newOrderFromFeign")
-    @Override
-    public ResultVo<NewOrderVo> newOrder(OrderVo order) {
-        return omOrderMainService.newOrder(order);
-    }
-
-    @PostMapping("/updateOrderInfoFromFeign")
-    @Override
-    public CodeMsg updateOrderInfo(OrderVo order) {
-        return omOrderMainService.updateOrderInfo(order);
-    }
-
-    @GetMapping("/getTodayOrderByUserOrderFromFeign")
-    @Override
-    public OrderVo getTodayOrderByUserOrder(String seckillId, String userId) {
-        return omOrderMainService.getTodayOrderByUserOrder(seckillId,userId);
     }
 
     //@PostMapping("/getMqttToken")

@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import us.sushome.onlinemallcloud.omccommon.api.goods.GoodsServiceApi;
 import us.sushome.onlinemallcloud.omccommon.api.goods.vo.GoodInfoVo;
 import us.sushome.onlinemallcloud.omccommon.api.goods.vo.GoodSkuVo;
 import us.sushome.onlinemallcloud.omccommon.api.goods.vo.SeckillGoodVo;
@@ -16,12 +15,11 @@ import us.sushome.onlinemallcloud.omccommon.result.CodeMsg;
 import us.sushome.onlinemallcloud.omccommon.result.Result;
 import us.sushome.onlinemallcloud.omcgoods830x.service.OmGoodsMainService;
 
-import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/openApi/goods")
-public class GoodsController implements GoodsServiceApi {
+public class GoodsController{
     private static Logger logger = LoggerFactory.getLogger(GoodsController.class);
 
     @Autowired
@@ -220,59 +218,5 @@ public class GoodsController implements GoodsServiceApi {
         }else{
             return Result.success(omGoodsMainService.getSeckillGoodInfoById(id));
         }
-    }
-
-    @GetMapping("/getGoodInfoBySkuIdFromFeign")
-    @Override
-    public GoodInfoVo getGoodInfoBySkuId(String skuId) {
-        return omGoodsMainService.getGoodInfoBySkuId(skuId);
-    }
-
-    @GetMapping("getOpeningSeckillGoodListFromFeign")
-    @Override
-    public List<SeckillGoodVo> getOpeningSeckillGoodList() {
-        return omGoodsMainService.getOpeningSeckillGoodList();
-    }
-
-    @GetMapping("/getSeckillGoodInfoByIdFromFeign")
-    @Override
-    public SeckillGoodVo getSeckillGoodInfoById(String id){
-        return omGoodsMainService.getSeckillGoodInfoById(id);
-    }
-
-    @PostMapping("/decrementGoodSkuInventoryByDecrActionListFromFeign")
-    @Override
-    public Boolean decrementGoodSkuInventoryByDecrActionList(List<Map<String, Object>> decrActionList) {
-        return omGoodsMainService.decrementGoodSkuInventoryByDecrActionList(decrActionList);
-    }
-
-    @GetMapping("/getSkuInventoryByIdFromFeign")
-    @Override
-    public Integer getSkuInventoryById(String id) {
-        return omGoodsMainService.getSkuInventoryById(id);
-    }
-
-    @GetMapping("/getSeckillGoodInventoryByIdFromFeign")
-    @Override
-    public Integer getSeckillGoodInventoryById(String id) {
-        return omGoodsMainService.getSeckillGoodInventoryById(id);
-    }
-
-    @GetMapping("/decrementSeckillGoodInventoryFromFeign")
-    @Override
-    public Boolean decrementSeckillGoodInventory(String id) {
-        return omGoodsMainService.decrementSeckillGoodInventory(id);
-    }
-
-    @GetMapping("/incrementSeckillGoodInventoryFromFeign")
-    @Override
-    public Boolean incrementSeckillGoodInventory(String id) {
-        return omGoodsMainService.incrementSeckillGoodInventory(id);
-    }
-
-    @PostMapping("/restoreStockByDecrActionListFromFeign")
-    @Override
-    public Boolean restoreStockByDecrActionList(List<Map<String, Object>> decrActionList) {
-        return omGoodsMainService.restoreStockByDecrActionList(decrActionList);
     }
 }

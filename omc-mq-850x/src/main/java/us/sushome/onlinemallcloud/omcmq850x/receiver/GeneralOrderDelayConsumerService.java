@@ -33,10 +33,10 @@ import static us.sushome.onlinemallcloud.omccommon.constants.OrderConstants.UN_C
 public class GeneralOrderDelayConsumerService implements RocketMQListener<MessageExt> {
     private static Logger logger = LoggerFactory.getLogger(GeneralOrderDelayConsumerService.class);
 
-    @Resource
+    @Autowired
     GoodsServiceApi goodsServiceApi;
 
-    @Resource
+    @Autowired
     OrderServiceApi orderServiceApi;
 
     @Autowired
