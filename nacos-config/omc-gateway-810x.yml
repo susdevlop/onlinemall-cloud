@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: omc-gateway-810x
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lowerCaseServiceId: true
+      routes:
+        # 用户服务路由配置
+        - id: user-route
+          uri: lb://omc-user-820x
+          predicates:
+            - Path=/openApi/user/**
+        - id: goods-route
+          uri: lb://omc-goods-830x
+          predicates:
+            - Path=/openApi/goods/**
+        - id: order-route
+          uri: lb://omc-order-840x
+          predicates:
+            - Path=/openApi/order/**
+
+sa-token:
+  token-name: satoken  # Token名称
+  timeout: 7200  # Token有效期，单位：秒
+  active-timeout: -1  # Token临时有效期，单位：秒
+  is-concurrent: true  # 是否允许同一账号并发登录
+  is-share: true  # 在多人登录同一账号时，是否共享Token
+  token-style: uuid  # Token风格
+  is-read-body: false  # 是否从请求体中读取Token
+  is-read-header: false  # 是否从请求头中读取Token
+  is-read-cookie: true  # 是否从Cookie中读取Token
+  is-log: true  # 是否打印日志            
+

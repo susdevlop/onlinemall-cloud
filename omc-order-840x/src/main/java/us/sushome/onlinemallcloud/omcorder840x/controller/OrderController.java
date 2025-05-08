@@ -181,7 +181,7 @@ public class OrderController{
                 } catch (Exception e) {
                     return Result.error(CodeMsg.SERVER_ERROR);
                 }
-                redisService.set(SeckillKeyPrefix.SK_PATH,userId + "_" + seckillGoodId,path);
+                redisService.set(SeckillKeyPrefix.SK_PATH,userId + "_" + seckillGoodId,path.trim());
                 return Result.success(path);
             }
         }

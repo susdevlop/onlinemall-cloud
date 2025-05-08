@@ -17,7 +17,7 @@ import us.sushome.onlinemallcloud.omccommon.saToken.FeignInterceptor;
 public interface OrderServiceApi {
 
     @GetMapping("/getOrderByIdFromFeign")
-    OrderVo getOrderById(@RequestParam String id, @RequestParam String name);
+    OrderVo getOrderById(@RequestParam String orderId, @RequestParam String userId);
 
     @Transactional
     @PostMapping("/newOrderFromFeign")

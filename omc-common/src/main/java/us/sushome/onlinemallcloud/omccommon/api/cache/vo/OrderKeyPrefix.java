@@ -11,5 +11,5 @@ public class OrderKeyPrefix extends BaseKeyPrefix implements Serializable {
         super(expireSeconds, prefix);
     }
 
-    public static OrderKeyPrefix ORDER = new OrderKeyPrefix("ORDER");
+    public static OrderKeyPrefix ORDER = new OrderKeyPrefix(60*60*24*30,"ORDER");
 }

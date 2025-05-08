@@ -72,7 +72,7 @@ public class GoodsInternalController implements GoodsServiceApi {
 
     @PostMapping("/restoreStockByDecrActionListFromFeign")
     @Override
-    public Boolean restoreStockByDecrActionList(@RequestParam List<Map<String, Object>> decrActionList) {
+    public Boolean restoreStockByDecrActionList(@RequestBody List<Map<String, Object>> decrActionList) {
         return omGoodsMainService.restoreStockByDecrActionList(decrActionList);
     }
 }

@@ -750,7 +750,7 @@ const MainComponent: React.FC<MainProps> = () => {
                             </div>
                             <div className={`ColumnBox text-orange items-end text-18px`}
                                  style={{width: 'calc(100% - 60% - 80px)'}}>
-                                ¥{selectedSku?.price}
+                                ¥{getSkuPrice()}
                             </div>
                         </div>
                         <div className={`w-full mt-10px RowBox py-10px justify-between`}

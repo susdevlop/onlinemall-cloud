@@ -23,7 +23,7 @@ dubbo:
   application:
     name: omc-order-840x
   registry:
-    address: nacos://127.0.0.1:8848
+    address: nacos://127.0.0.1:8848?namespace=4f4bab40-8cb4-44b4-bbc1-c759e35d3291
   consumer:
     check: false
     loadbalance: "random"

@@ -21,7 +21,7 @@ public class OrderInternalController implements OrderServiceApi {
 
     @GetMapping("/getOrderByIdFromFeign")
     @Override
-    public OrderVo getOrderById(@RequestParam String orderId, @RequestParam String userId) {
+    public OrderVo getOrderById(@RequestParam String orderId, @RequestParam(required = false) String userId) {
         return omOrderMainService.getOrderById(orderId,userId);
     }
 

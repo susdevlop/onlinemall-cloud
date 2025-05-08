@@ -11,6 +11,7 @@ import us.sushome.onlinemallcloud.omccommon.api.cache.vo.KeyPrefix;
 import us.sushome.onlinemallcloud.omccommon.utils.StringUtils;
 
 import javax.annotation.Resource;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class RedisService implements RedisServiceApi {
@@ -48,7 +49,7 @@ public class RedisService implements RedisServiceApi {
             // 设置key的过期时间为redis默认值（由redis的缓存策略控制）
             redisTemplate.opsForValue().set(realKey, strValue);
         }else {
-            redisTemplate.opsForValue().set(realKey,strValue,expires);
+            redisTemplate.opsForValue().set(realKey,strValue,expires, TimeUnit.SECONDS);
         }
         return true;
     }
@@ -120,9 +121,9 @@ public class RedisService implements RedisServiceApi {
         }else if(clazz == Float.class){
             return value.toString();
         }else if(clazz == String.class){
-            return (String) value;
+            return ((String) value).trim();
         }else{
-            return JSON.toJSONString(value);
+            return JSON.toJSONString(value).trim();
         }
     }
 

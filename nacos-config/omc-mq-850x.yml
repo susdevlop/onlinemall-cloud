@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: omc-mq-850x
+rocketmq:
+  name-server: 116.205.xxx.xxx:9876
+  producer:
+    group: rocketmq-producer-group
+    send-message-timeout: 30000
+    max-message-size: 100000
+
+dubbo:
+  protocol:
+    name: dubbo
+    port: 20880
+  registry:
+    address: nacos://127.0.0.1:8848?namespace=4f4bab40-8cb4-44b4-bbc1-c759e35d3291
+  scan:
+    base-packages: us.sushome.onlinemallcloud.omcmq850x.service
+
